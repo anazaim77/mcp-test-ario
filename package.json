@@ -1,0 +1,11 @@
+{
+  "name": "mcp-test-ario",
+  "version": "1.0.0",
+  "scripts": {
+    "stop:mcp": "cd apps/mcp-app && docker compose down",
+    "serve:mcp": "npm run stop:mcp && cd apps/mcp-app && docker compose up -d --build"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
