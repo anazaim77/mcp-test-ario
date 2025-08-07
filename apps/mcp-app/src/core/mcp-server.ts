@@ -3,6 +3,7 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { ServerConfig } from "../types/server";
 import { logger } from "../utils/logger";
 import { calculatorTool } from "../tools/calculator";
+import { scrapeTokopediaTool } from "../tools/scrape-tokopedia";
 
 // MCP Server manager
 export class McpServerManager {
@@ -32,8 +33,16 @@ export class McpServerManager {
       calculatorTool.handler
     );
 
+    // Register scrape Tokopedia tool
+    this.server.tool(
+      scrapeTokopediaTool.name,
+      scrapeTokopediaTool.description,
+      scrapeTokopediaTool.inputSchema,
+      scrapeTokopediaTool.handler
+    );
+
     logger.info("Tools registered", {
-      tools: [calculatorTool.name],
+      tools: [calculatorTool.name, scrapeTokopediaTool.name],
     });
   }
 

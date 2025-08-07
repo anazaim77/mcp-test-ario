@@ -94,7 +94,7 @@ export class ScraperService {
         '--disable-component-extensions-with-background-pages',
         '--safebrowsing-disable-auto-update',
         '--metrics-recording-only',
-        '--ignore-certificate-errors-spki-list'
+        '--ignore-certificate-errors-spki-list',
       ],
     });
     const page: PuppeteerPage = await browser.newPage();
