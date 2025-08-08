@@ -142,7 +142,7 @@ This includes detailed information about:
 
 The authentication concept for retrieving user purchase history can be found in the UML diagram:
 
-**`get_purchase_uml.png`**
+**[`get_purchase_uml.png`](./get_purchase_uml.png)**
 
 This diagram illustrates:
 
@@ -178,7 +178,7 @@ The project consists of two main services:
 
 - Implements the Model Context Protocol
 
-- Provides tools for calculations and web scraping
+- Provides tools for web scraping
 
 - Runs on port 4002
 
