@@ -5,7 +5,7 @@ export interface McpTool {
   name: string;
   description: string;
   inputSchema: any;
-  handler: (args: any) => Promise<CallToolResult>;
+  handler: (args: any, sessionId?: string) => Promise<CallToolResult>;
 }
 
 // MCP server interface

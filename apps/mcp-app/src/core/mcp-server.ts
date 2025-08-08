@@ -9,6 +9,7 @@ import { scrapeTokopediaTool } from "../tools/scrape-tokopedia";
 export class McpServerManager {
   private server: McpServer;
   private config: ServerConfig;
+  private currentTransport: StreamableHTTPServerTransport | null = null;
 
   constructor(config: ServerConfig) {
     this.config = config;
@@ -17,7 +18,6 @@ export class McpServerManager {
       version: config.version,
     });
 
-    this.registerTools();
     logger.info("MCP Server manager initialized", {
       name: config.name,
       version: config.version,
@@ -33,12 +33,16 @@ export class McpServerManager {
       calculatorTool.handler
     );
 
-    // Register scrape Tokopedia tool
+    // Register scrape Tokopedia tool with session context
     this.server.tool(
       scrapeTokopediaTool.name,
       scrapeTokopediaTool.description,
       scrapeTokopediaTool.inputSchema,
-      scrapeTokopediaTool.handler
+      async (args: any) => {
+        // Pass session ID to the handler if available
+        const sessionId = this.currentTransport?.sessionId;
+        return scrapeTokopediaTool.handler(args, sessionId);
+      }
     );
 
     logger.info("Tools registered", {
@@ -50,8 +54,12 @@ export class McpServerManager {
     transport: StreamableHTTPServerTransport
   ): Promise<void> {
     try {
+      this.currentTransport = transport;
+      this.registerTools();
       await this.server.connect(transport);
-      logger.info("MCP Server connected to transport");
+      logger.info("MCP Server connected to transport", {
+        sessionId: transport.sessionId,
+      });
     } catch (error) {
       logger.error("Failed to connect MCP server to transport", { error });
       throw error;

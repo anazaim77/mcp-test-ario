@@ -11,25 +11,34 @@ import { CONFIG } from "../config";
 
 // Scrape Tokopedia tool handler
 export const scrapeTokopediaHandler = async (
-  args: ScrapeTokopediaInput
+  args: ScrapeTokopediaInput,
+  sessionId?: string
 ): Promise<CallToolResult> => {
   const { keyword } = args;
 
-  logger.debug("Scrape Tokopedia tool called", { keyword });
+  logger.debug("Scrape Tokopedia tool called", { keyword, sessionId });
 
   try {
     // Encode the keyword for URL
     const encodedKeyword = encodeURIComponent(keyword);
     const url = `${CONFIG.SERVER.scraperBaseUrl}/scraper/tokopedia?keyword=${encodedKeyword}`;
 
-    logger.info("Making request to scraper service", { url });
+    logger.info("Making request to scraper service", { url, sessionId });
+
+    // Prepare headers
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    // Add session ID to headers if provided
+    if (sessionId) {
+      headers["mcp-session-id"] = sessionId;
+    }
 
     // Make HTTP request to the scraper service
     const response = await fetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
     });
 
     if (!response.ok) {
@@ -54,6 +63,7 @@ export const scrapeTokopediaHandler = async (
     logger.info("Scrape Tokopedia completed", {
       keyword,
       totalFound: products.length,
+      sessionId,
     });
 
     // Format the response for the user
@@ -89,6 +99,7 @@ export const scrapeTokopediaHandler = async (
     logger.error("Error in scrape Tokopedia tool", {
       error: errorMessage,
       keyword,
+      sessionId,
     });
 
     return {
