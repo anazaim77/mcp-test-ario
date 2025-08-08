@@ -25,6 +25,35 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## API Endpoints
+
+### Authentication
+
+#### Check Authentication Status
+
+- **Endpoint**: `GET /auth/check`
+- **Headers**:
+  - `mcp-session-id` (required): Session ID for authentication check
+- **Response**:
+  ```json
+  {
+    "authenticated": true
+  }
+  ```
+- **Description**: Checks if a user is authenticated by looking for a session file named `{session_id}-auth.json` in the application root directory.
+
+**Example Usage:**
+
+```bash
+curl -H "mcp-session-id: example-session-123" http://localhost:3000/auth/check
+```
+
+**Response Examples:**
+
+- If session file exists: `{"authenticated": true}`
+- If session file doesn't exist: `{"authenticated": false}`
+- If no session ID provided: `{"authenticated": false}`
+
 ## Project setup
 
 ```bash
