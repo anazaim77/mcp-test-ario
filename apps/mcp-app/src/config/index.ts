@@ -2,11 +2,13 @@ import { ServerConfig } from "../types/server";
 
 // Default server configuration
 export const defaultServerConfig: ServerConfig = {
-  port: 3000,
+  port: 4000,
   name: "test-ario-mcp-server",
   version: "1.0.0",
   enableDnsRebindingProtection: false, // Disabled for local development
   allowedHosts: ["127.0.0.1", "localhost"],
+  scraperBaseUrl: "http://localhost:4004",
+  // scraperBaseUrl: "http://scraper-service:4004",
 };
 
 // Environment-based configuration

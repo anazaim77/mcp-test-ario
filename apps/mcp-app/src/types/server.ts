@@ -8,6 +8,7 @@ export interface ServerConfig {
   version: string;
   enableDnsRebindingProtection?: boolean;
   allowedHosts?: string[];
+  scraperBaseUrl: string;
 }
 
 // Transport management interface

@@ -7,6 +7,7 @@ import {
 } from "../types/scrape-tokopedia";
 import { logger } from "../utils/logger";
 import { z } from "zod";
+import { CONFIG } from "../config";
 
 // Scrape Tokopedia tool handler
 export const scrapeTokopediaHandler = async (
@@ -19,7 +20,7 @@ export const scrapeTokopediaHandler = async (
   try {
     // Encode the keyword for URL
     const encodedKeyword = encodeURIComponent(keyword);
-    const url = `http://scraper-service:4004/scraper/tokopedia?keyword=${encodedKeyword}`;
+    const url = `${CONFIG.SERVER.scraperBaseUrl}/scraper/tokopedia?keyword=${encodedKeyword}`;
 
     logger.info("Making request to scraper service", { url });
 
