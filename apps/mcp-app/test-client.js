@@ -8,7 +8,7 @@ async function testMcpServer() {
   try {
     // 1. Initialize MCP session
     console.log("1. Initializing MCP session...");
-    const initResponse = await fetch("http://localhost:4000/mcp", {
+    const initResponse = await fetch("http://localhost:4002/mcp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ async function testMcpServer() {
 
     // 2. List available tools
     console.log("2. Listing available tools...");
-    const listResponse = await fetch("http://localhost:4000/mcp", {
+    const listResponse = await fetch("http://localhost:4002/mcp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +72,7 @@ async function testMcpServer() {
     const testKeyword = "case iphone 11";
     console.log(`   Testing: scrape_tokopedia with keyword "${testKeyword}"`);
 
-    const scrapeResponse = await fetch("http://localhost:4000/mcp", {
+    const scrapeResponse = await fetch("http://localhost:4002/mcp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

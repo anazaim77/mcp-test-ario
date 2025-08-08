@@ -7,8 +7,8 @@ export const defaultServerConfig: ServerConfig = {
   version: "1.0.0",
   enableDnsRebindingProtection: false, // Disabled for local development
   allowedHosts: ["127.0.0.1", "localhost"],
-  scraperBaseUrl: "http://localhost:4004",
-  // scraperBaseUrl: "http://scraper-service:4004",
+  // scraperBaseUrl: "http://localhost:4004", // for local development
+  scraperBaseUrl: "http://scraper-service:4004",
 };
 
 // Environment-based configuration

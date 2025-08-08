@@ -10,7 +10,7 @@ The server provides a modular framework for MCP tools with:
 - **Type Safety**: Full TypeScript support with Zod validation
 - **Extensible Design**: Easy to add new tools and features
 - **Production Ready**: Docker support with proper logging and error handling
-- **Example Tools**: Currently includes a calculator tool as an example implementation
+- **Example Tools**: Currently includes a Tokopedia scraping tool as an example implementation
 
 ## Quick Start
 
@@ -87,15 +87,15 @@ Once configured, you can test the connection by asking your MCP client to:
    What tools are available from the test-ario-mcp server?
    ```
 
-2. **Test example calculations:**
+2. **Test Tokopedia scraping:**
 
    ```
-   Calculate 15 + 27 using the calculator tool
+   Search for "case iphone 11" on Tokopedia
    ```
 
 3. **Test error handling:**
    ```
-   Try to divide 10 by 0 using the calculator tool
+   Try to scrape with an empty keyword
    ```
 
 ## Testing Your MCP Server
@@ -120,12 +120,12 @@ Once configured, you can test the connection by asking your MCP client to:
      -H "Accept: application/json, text/event-stream" \
      -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{"tools":{}},"clientInfo":{"name":"test","version":"1.0.0"}}}'
 
-   # Call calculator (replace SESSION_ID with actual session ID from headers)
+   # Call scrape Tokopedia (replace SESSION_ID with actual session ID from headers)
    curl -X POST http://localhost:3000/mcp \
      -H "Content-Type: application/json" \
      -H "Accept: application/json, text/event-stream" \
      -H "mcp-session-id: SESSION_ID" \
-     -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"calculator","arguments":{"operation":"add","a":5,"b":3}}}'
+     -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"scrape_tokopedia","arguments":{"keyword":"case iphone 11"}}}'
    ```
 
 ### Test Results You Should See
@@ -133,50 +133,35 @@ Once configured, you can test the connection by asking your MCP client to:
 When running `node test-client.js`, you should see output like:
 
 ```
-🚀 Testing MCP Calculator Server...
+🚀 Testing MCP Scrape Tokopedia Server...
 
 1. Initializing MCP session...
 ✅ Session initialized: 1
 📋 Session ID: abc123-def456-ghi789
 
 2. Listing available tools...
-✅ Available tools: ['calculator']
+✅ Available tools: ['scrape_tokopedia']
 
-3. Testing calculator operations...
+3. Testing scrape Tokopedia tool...
 
-   Testing: add(5, 3)
-   ✅ Result: Calculation result: 5 + 3 = 8
-   ✅ Validation: Expected 8, got 8
-
-   Testing: multiply(6, 7)
-   ✅ Result: Calculation result: 6 × 7 = 42
-   ✅ Validation: Expected 42, got 42
-
-   Testing: sqrt(16)
-   ✅ Result: Calculation result: √16 = 4
-   ✅ Validation: Expected 4, got 4
-
-4. Testing error cases...
-
-   Testing: Division by zero
-   ✅ Error handled: Error: Division by zero is not allowed
+   Testing: scrape_tokopedia with keyword "case iphone 11"
+   ✅ Result: Found 5 products for keyword "case iphone 11"...
+   ✅ Products with titles, prices, ratings, and links
 
 🎉 All tests completed!
 ```
 
 ## API Reference
 
-### Example Tool: Calculator
+### Example Tool: Scrape Tokopedia
 
-**Name:** `calculator`
+**Name:** `scrape_tokopedia`
 
-**Description:** Example calculator tool that performs basic arithmetic operations
+**Description:** Scrape product listings from Tokopedia based on keyword searches
 
 **Parameters:**
 
-- `operation` (string, required): One of "add", "subtract", "multiply", "divide", "power", "sqrt"
-- `a` (number, required): First number for the operation
-- `b` (number, optional): Second number for the operation (required for all operations except sqrt)
+- `keyword` (string, required): Search keyword for products
 
 **Example Response:**
 
@@ -188,7 +173,7 @@ When running `node test-client.js`, you should see output like:
     "content": [
       {
         "type": "text",
-        "text": "Calculation result: 5 + 3 = 8"
+        "text": "Found 5 products for keyword \"case iphone 11\":\n\n1. **Case iPhone 11 Premium**\n   💰 Price: Rp 150.000\n   ⭐ Rating: 4.8\n   🏪 Store: TechStore\n   🔗 Link: https://tokopedia.com/...\n   🖼️ Image: https://images.tokopedia.net/..."
       }
     ]
   }
@@ -227,14 +212,14 @@ To add new tools to the server:
 3. Register the tool in `src/core/mcp-server.ts`
 4. Add tests in `test-client.js`
 
-### Adding New Calculator Operations
+### Adding New Scraping Operations
 
-To add new calculator operations (example):
+To add new scraping operations (example):
 
-1. Add the operation to the `calculatorFunctions` object in `src/tools/calculator.ts`
-2. Add the operation to the enum in the tool schema
-3. Add a case in the switch statement in the tool callback
-4. Update tests in `test-client.js`
+1. Create a new scraping tool in `src/tools/`
+2. Add the scraping logic and API integration
+3. Register the tool in `src/core/mcp-server.ts`
+4. Add tests in `test-client.js`
 
 ## Troubleshooting
 
@@ -253,4 +238,4 @@ To see detailed server logs, run:
 docker-compose up --build
 ```
 
-The server will log all incoming requests and responses, helping you verify that your calculator tools are being called correctly.
+The server will log all incoming requests and responses, helping you verify that your scraping tools are being called correctly.
