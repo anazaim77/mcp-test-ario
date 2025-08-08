@@ -7,10 +7,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Web Scraper API')
-    .setDescription('API untuk melakukan scraping data dari berbagai website.')
+    .setTitle('Documentation Scraper API')
+    .setDescription('API for scraping data from various websites.')
     .setVersion('1.0')
-    .addTag('scraper')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
